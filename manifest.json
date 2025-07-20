@@ -1,9 +1,9 @@
 {
   "manifest_version": 2,
-  "name": "WaniKani Tooltip Helper",
+  "name": "WaniKani Autocomplete",
   "version": "1.0",
   "description": "Adds tooltips to WaniKani elements.",
-  "permissions": ["https://www.wanikani.com/"],
+  "permissions": ["storage", "https://www.wanikani.com/*", "https://api.wanikani.com/*"],
   "background": {
     "scripts": ["background.js"]
   },
@@ -19,8 +19,12 @@
     {
       "matches": ["https://www.wanikani.com/*"],
       "js": ["content.js"],
-      "css": ["tooltip.css"],
-      "run_at": "document_idle"
+      "css": ["tooltip.css"]
     }
-  ]
+  ],
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "wanikani-addon@example.com"
+    }
+  }
 }
