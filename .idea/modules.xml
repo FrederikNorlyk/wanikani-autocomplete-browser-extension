@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/wanikani-autocomplete.iml" filepath="$PROJECT_DIR$/.idea/wanikani-autocomplete.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/WaniKani Autocomplete.iml" filepath="$PROJECT_DIR$/.idea/WaniKani Autocomplete.iml" />
     </modules>
   </component>
 </project>
