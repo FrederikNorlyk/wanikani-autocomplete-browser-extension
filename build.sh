@@ -6,6 +6,9 @@ set -e
 # Create dist folder if missing
 mkdir -p dist
 
+# Clean up old zip if it exists
+rm -f dist/extension.zip
+
 cd src
 
 # Zip all files and folders inside src/ (without the folder itself)
