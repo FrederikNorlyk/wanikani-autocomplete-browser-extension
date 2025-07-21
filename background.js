@@ -1,41 +1,50 @@
 chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     if (msg.type === "get_synonyms") {
-        chrome.storage.local.get("wanikani_api_key", async ({ wanikani_api_key }) => {
-            let url = "https://api.wanikani.com/v2/study_materials";
-            let allSynonyms = [];
+        chrome.storage.local.get("wanikani_api_key", async ({ wanikani_api_key: apiKey }) => {
+            let url = "https://api.wanikani.com/v2/subjects";
+            let allSynonyms = new Set();
 
             try {
                 while (url) {
-                    const res = await fetch(url, {
+                    const response = await fetch(url, {
                         headers: {
-                            "Authorization": `Bearer ${wanikani_api_key}`
+                            "Authorization": `Bearer ${apiKey}`
                         }
                     });
 
-                    if (!res.ok) {
-                        let errorText = await res.text();
-                        errorText += ` api key: ${wanikani_api_key}`;
-                        sendResponse({ success: false, error: `HTTP ${res.status}: ${errorText}` });
+                    if (!response.ok) {
+                        let errorText = await response.text();
+                        sendResponse({ success: false, error: `HTTP ${response.status}: ${errorText}` });
                         return;
                     }
 
-                    const json = await res.json();
+                    const json = await response.json();
 
                     if (!json.data) {
                         sendResponse({ success: false, error: "No data found in response: " + json });
                         return;
                     }
 
-                    allSynonyms.push(...json.data.flatMap(d => d.data.meaning_synonyms));
+                    for (const datum of json.data) {
+                        for (const meaning of datum.data.meanings) {
+                            allSynonyms.add(meaning.meaning.toLowerCase());
+                        }
+
+                        for (const meaning of datum.data.auxiliary_meanings) {
+                            allSynonyms.add(meaning.meaning.toLowerCase());
+                        }
+                    }
+
                     url = json.pages?.next_url;
                 }
 
-                sendResponse({ success: true, synonyms: allSynonyms });
+                let synonyms = Array.from(allSynonyms).sort((a, b) => a.length - b.length);
+                sendResponse({ success: true, synonyms: synonyms });
             } catch (e) {
                 sendResponse({ success: false, error: e.toString() });
             }
         });
 
-        return true; // Keep message channel open for async
+        return true;
     }
 });
