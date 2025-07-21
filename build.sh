@@ -1,4 +1,5 @@
 #!/bin/bash
+echo "Zipping source files."
 
 # Exit on error
 set -e
@@ -16,4 +17,4 @@ zip -r ../dist/extension.zip ./*
 
 cd ..
 
-echo "Build complete: dist/extension.zip"
+echo "Build complete: dist/extension.zip."
