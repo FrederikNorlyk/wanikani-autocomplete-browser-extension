@@ -9,10 +9,17 @@ chrome.storage.local.get("wanikani_api_key", (data) => {
     if (data.wanikani_api_key) {
         apiKey = data.wanikani_api_key;
         console.log("Loaded API key.");
-        fetchSynonyms();
     } else {
-        console.error("No API key saved.")
+        apiKey = prompt("Please specify an API token.")
+        chrome.storage.local.set({ wanikani_api_key: apiKey });
     }
+
+    if (!apiKey) {
+        console.log("No API key found.");
+        return;
+    }
+
+    fetchSynonyms();
 });
 
 document.addEventListener("keydown", (e) => {
