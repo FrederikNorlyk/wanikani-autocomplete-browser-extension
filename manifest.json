@@ -24,7 +24,7 @@
   ],
   "browser_specific_settings": {
     "gecko": {
-      "id": "wanikani-addon@example.com"
+      "id": "wanikani-autocomplete@frederiknorlyk.dev"
     }
   }
 }
