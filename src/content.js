@@ -3,6 +3,8 @@ let answers;
 let match;
 let tooltipTimeout;
 
+createTooltip();
+
 chrome.storage.local.get("wanikani_api_key", (data) => {
     if (data.wanikani_api_key) {
         apiKey = data.wanikani_api_key;
@@ -17,7 +19,7 @@ document.addEventListener("keydown", (e) => {
 
     const ignoredKeys = [
         "Control", "Shift", "Alt", "AltGraph", "Meta",
-        "CapsLock", "Tab", "Escape", "Fn", "FnLock",
+        "CapsLock", "Fn", "FnLock",
         "NumLock", "ScrollLock", "Pause",
         "Insert", "PrintScreen", "ContextMenu",
         "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight",
@@ -28,15 +30,20 @@ document.addEventListener("keydown", (e) => {
         return;
     }
 
+    const input = document.querySelector("#user-response");
+
+    // Only do autocomplete for English answers
+    if (input && input.lang === "ja") {
+        return;
+    }
+
     if (e.key === "Tab") {
         e.preventDefault(); // prevent actual tab
 
         removeTooltip();
 
-        const target = document.querySelector("#user-response");
-
-        if (match && target) {
-            target.value = match;
+        if (match && input) {
+            input.value = match;
             match = undefined;
         }
 
@@ -59,21 +66,16 @@ document.addEventListener("keydown", (e) => {
             return;
         }
 
-        const value = target.value.trim().toLocaleLowerCase();
+        const value = target.value.toLocaleLowerCase();
 
         if (!value) {
             console.warn("No value found in user response input field")
             return;
         }
 
-        const start = performance.now();
         match = answers.find(s => s.startsWith(value));
-        const end = performance.now();
-
-        console.log(`Match took ${Math.round(end - start)} ms`);
 
         if (match) {
-            console.log(`Match index: ${answers.indexOf(match)}`);
             showTooltip(match);
         } else {
             console.log(`No match found for value: '${value}'`)
@@ -81,39 +83,47 @@ document.addEventListener("keydown", (e) => {
     }, 300);
 });
 
+function createTooltip() {
+    const tooltip = document.createElement("div");
+    tooltip.className = "wanikani-autocomplete-tooltip";
+    document.body.appendChild(tooltip);
+}
+
 function showTooltip(message) {
-    removeTooltip();
+    const input = document.querySelector("#user-response");
 
-    const target = document.querySelector("#user-response");
-
-    if (!target) {
+    if (!input) {
         console.error("Could not find user response input");
         return;
     }
 
-    const tooltip = document.createElement("div");
-    tooltip.className = "my-tooltip";
+    const tooltip = document.querySelector(".wanikani-autocomplete-tooltip");
+
+    if (!tooltip) {
+        console.error("Coult not find tooltip");
+        return
+    }
+
     tooltip.textContent = message;
 
-    const rect = target.getBoundingClientRect();
+    const rect = input.getBoundingClientRect();
     tooltip.style.top = `${rect.top + window.scrollY}px`;
 
     let x = window.innerWidth / 2;
-    x += target.value.length * 7;
+    x += input.value.length * 7;
     tooltip.style.left = `${x}px`;
 
-    document.body.appendChild(tooltip);
+    tooltip.classList.add("show");
 }
 
 function removeTooltip() {
-    document.querySelector(".my-tooltip")?.remove();
+    document.querySelector(".wanikani-autocomplete-tooltip")?.classList.remove("show");
 }
 
 async function fetchSynonyms() {
     chrome.runtime.sendMessage({type: "get_synonyms"}, (res) => {
         if (res.success) {
             answers = res.synonyms;
-            console.dir(answers);
             return res.synonyms;
         } else {
             console.error("Error:", res.error);
