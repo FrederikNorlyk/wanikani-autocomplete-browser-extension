@@ -153,14 +153,6 @@ function showTooltip(message) {
 
     const tooltip = getTooltip();
     tooltip.textContent = message;
-
-    const rect = input.getBoundingClientRect();
-    tooltip.style.top = `${rect.top + window.scrollY}px`;
-
-    let x = window.innerWidth / 2;
-    x += input.value.length * 7;
-    tooltip.style.left = `${x}px`;
-
     tooltip.classList.add("show");
 }
 
