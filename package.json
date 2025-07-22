@@ -1,0 +1,18 @@
+{
+  "name": "wanikani-autocomplete-browser-extension",
+  "version": "1.3.0",
+  "description": "Adds autocomplete functionality to WaniKani.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FrederikNorlyk/wanikani-autocomplete-browser-extension.git"
+  },
+  "author": "Frederik Norlyk",
+  "scripts": {
+    "build": "bash build.sh",
+    "lint": "prettier . --check",
+    "format": "prettier . --write"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}

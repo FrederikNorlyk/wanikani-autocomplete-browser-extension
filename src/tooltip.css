@@ -1,27 +1,27 @@
 .wanikani-autocomplete-tooltip {
-    position: fixed;
-    top: 228px;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: #9800e4;
-    color: #ffffff;
-    padding: 6px 10px;
-    border-radius: 6px;
-    font-size: 16px;
-    z-index: 9999;
-    box-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
+  position: fixed;
+  top: 228px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #9800e4;
+  color: #ffffff;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 16px;
+  z-index: 9999;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 1px 0;
 
-    opacity: 0;
-    pointer-events: none;
+  opacity: 0;
+  pointer-events: none;
 }
 
 @media (min-width: 768px) {
-    .wanikani-autocomplete-tooltip {
-        top: 283px;
-    }
+  .wanikani-autocomplete-tooltip {
+    top: 283px;
+  }
 }
 
 /* Show tooltip */
 .wanikani-autocomplete-tooltip.show {
-    opacity: 1;
+  opacity: 1;
 }
