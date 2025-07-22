@@ -1,7 +1,9 @@
 let apiKey;
 let answers;
-let match;
+let matches = [];
+let matchIndex = 0;
 let tooltipTimeout;
+let query;
 
 createTooltip();
 
@@ -47,34 +49,43 @@ document.addEventListener("keydown", (e) => {
     if (e.key === "Tab") {
         e.preventDefault(); // prevent actual tab
 
-        if (!match) {
-            console.warn("No match found")
+        if (matches.length === 0) {
+            console.warn("No matches found")
             return;
         }
 
-        setInputValue(match);
-        match = undefined;
+        if (e.shiftKey) {
+            // Cycle backwards
+            matchIndex = matchIndex - 1;
+            if (matchIndex < 0) {
+                matchIndex = matches.length - 1;
+            }
+        } else {
+            // Cycle forwards
+            matchIndex = (matchIndex + 1) % matches.length;
+        }
+
+        setInputValue(matches[matchIndex]);
 
         return;
     } else if (e.key === "Escape" || e.key === "Enter") {
-        match = undefined;
         return;
     }
 
     tooltipTimeout = setTimeout(() => {
         const value = getInputValue();
 
+        query = value;
+
         if (!value) {
-            console.warn("No value found in user response input field")
             return;
         }
 
-        match = answers.find(s => s.startsWith(value));
+        matches = answers.filter(s => s.startsWith(value));
+        matchIndex = -1;
 
-        if (match) {
-            showTooltip(match);
-        } else {
-            console.log(`No match found for value: '${value}'`)
+        if (matches.length > 0) {
+            showTooltip(matches[0]);
         }
     }, 200);
 });
