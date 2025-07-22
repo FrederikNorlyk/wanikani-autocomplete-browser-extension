@@ -76,7 +76,7 @@ document.addEventListener("keydown", (e) => {
         } else {
             console.log(`No match found for value: '${value}'`)
         }
-    }, 300);
+    }, 200);
 });
 
 function getInput() {
