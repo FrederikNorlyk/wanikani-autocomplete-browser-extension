@@ -8,18 +8,17 @@ createTooltip();
 chrome.storage.local.get("wanikani_api_key", (data) => {
     if (data.wanikani_api_key) {
         apiKey = data.wanikani_api_key;
-        console.log("Loaded API key.");
     } else {
         apiKey = prompt("Please specify an API token.")
         chrome.storage.local.set({ wanikani_api_key: apiKey });
     }
 
     if (!apiKey) {
-        console.log("No API key found.");
+        console.warn("No API key found.");
         return;
     }
 
-    fetchSynonyms();
+    fetchAnswers();
 });
 
 document.addEventListener("keydown", (e) => {
@@ -37,43 +36,33 @@ document.addEventListener("keydown", (e) => {
         return;
     }
 
-    const input = document.querySelector("#user-response");
+    removeTooltip();
+    clearTimeout(tooltipTimeout);
 
     // Only do autocomplete for English answers
-    if (input && input.lang === "ja") {
+    if (getInputLanguage() === "ja") {
         return;
     }
 
     if (e.key === "Tab") {
         e.preventDefault(); // prevent actual tab
 
-        removeTooltip();
-
-        if (match && input) {
-            input.value = match;
-            match = undefined;
+        if (!match) {
+            console.warn("No match found")
+            return;
         }
+
+        setInputValue(match);
+        match = undefined;
 
         return;
     } else if (e.key === "Escape" || e.key === "Enter") {
-        removeTooltip();
         match = undefined;
         return;
     }
 
-    match = undefined;
-    removeTooltip();
-    clearTimeout(tooltipTimeout);
-
     tooltipTimeout = setTimeout(() => {
-        const target = document.querySelector("#user-response");
-
-        if (!target) {
-            console.error("Could not find user response input field")
-            return;
-        }
-
-        const value = target.value.toLocaleLowerCase();
+        const value = getInputValue();
 
         if (!value) {
             console.warn("No value found in user response input field")
@@ -90,27 +79,68 @@ document.addEventListener("keydown", (e) => {
     }, 300);
 });
 
+function getInput() {
+     return document.querySelector("#user-response");
+}
+
+function getInputValue() {
+    const input = getInput();
+
+    if (!input) {
+        console.error("Could not find user response input field")
+        return undefined;
+    }
+
+    return input.value.toLocaleLowerCase();
+}
+
+function setInputValue(value) {
+    const input = getInput();
+
+    if (!input) {
+        console.error("Could not find user response input field")
+        return;
+    }
+
+    input.value = value;
+}
+
+function getInputLanguage() {
+    const input = getInput();
+
+    if (!input) {
+        console.error("Could not find user response input field")
+        return undefined;
+    }
+
+    return input.lang;
+}
+
 function createTooltip() {
     const tooltip = document.createElement("div");
     tooltip.className = "wanikani-autocomplete-tooltip";
     document.body.appendChild(tooltip);
 }
 
+function getTooltip() {
+    let tooltip = document.querySelector(".wanikani-autocomplete-tooltip");
+
+    if (!tooltip) {
+        throw Error("Could not find tooltip");
+    }
+
+    return tooltip;
+}
+
 function showTooltip(message) {
-    const input = document.querySelector("#user-response");
+    const input = getInput();
 
     if (!input) {
         console.error("Could not find user response input");
         return;
     }
 
-    const tooltip = document.querySelector(".wanikani-autocomplete-tooltip");
-
-    if (!tooltip) {
-        console.error("Coult not find tooltip");
-        return
-    }
-
+    const tooltip = getTooltip();
     tooltip.textContent = message;
 
     const rect = input.getBoundingClientRect();
@@ -124,10 +154,10 @@ function showTooltip(message) {
 }
 
 function removeTooltip() {
-    document.querySelector(".wanikani-autocomplete-tooltip")?.classList.remove("show");
+    getTooltip().classList.remove("show");
 }
 
-async function fetchSynonyms() {
+async function fetchAnswers() {
     chrome.runtime.sendMessage({type: "get_synonyms"}, (res) => {
         if (res.success) {
             answers = res.synonyms;
