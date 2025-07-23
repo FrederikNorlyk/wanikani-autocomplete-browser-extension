@@ -24,6 +24,13 @@ chrome.storage.local.get("wanikani_api_key", (data) => {
 });
 
 document.addEventListener("keydown", (e) => {
+  const input = getInput();
+
+  if (!input || e.target !== input) {
+    // Not on the right page or not in the right input field
+    return;
+  }
+
   const ignoredKeys = [
     "Control",
     "Shift",
