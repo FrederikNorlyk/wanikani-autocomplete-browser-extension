@@ -96,7 +96,7 @@ document.addEventListener("keydown", (e) => {
       return;
     }
 
-    matches = answers.filter((s) => s.startsWith(value));
+    matches = answers.filter((s) => s.startsWith(value) && s !== value);
     matchIndex = -1;
 
     if (matches.length > 0) {
