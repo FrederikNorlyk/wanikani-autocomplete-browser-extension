@@ -60,21 +60,26 @@ document.addEventListener("keydown", (e) => {
     return;
   }
 
-  removeTooltip();
-  clearTimeout(tooltipTimeout);
-
   // Only do autocomplete for English answers
   if (getInputLanguage() === "ja") {
+    removeTooltip();
+    clearTimeout(tooltipTimeout);
+
     return;
   }
 
   // The input field is disabled
   let isEnabled = input.getAttribute("enabled") === "true";
   if (!isEnabled) {
+    removeTooltip();
+    clearTimeout(tooltipTimeout);
     return;
   }
 
   if (e.key === "Tab") {
+    removeTooltip();
+    clearTimeout(tooltipTimeout);
+
     e.preventDefault(); // prevent actual tab
 
     if (matches.length === 0) {
@@ -106,6 +111,8 @@ document.addEventListener("keydown", (e) => {
     query = value;
 
     if (!value) {
+      removeTooltip();
+      clearTimeout(tooltipTimeout);
       return;
     }
 
@@ -114,6 +121,9 @@ document.addEventListener("keydown", (e) => {
 
     if (matches.length > 0) {
       showTooltip(matches[0]);
+    } else {
+      removeTooltip();
+      clearTimeout(tooltipTimeout);
     }
   }, 200);
 });
