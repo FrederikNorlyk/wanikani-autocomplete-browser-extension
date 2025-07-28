@@ -68,6 +68,12 @@ document.addEventListener("keydown", (e) => {
     return;
   }
 
+  // The input field is disabled
+  let isEnabled = input.getAttribute("enabled") === "true";
+  if (!isEnabled) {
+    return;
+  }
+
   if (e.key === "Tab") {
     e.preventDefault(); // prevent actual tab
 
