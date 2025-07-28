@@ -1,5 +1,6 @@
 let apiKey;
-let answers;
+let kanji;
+let vocabulary;
 let matches = [];
 let matchIndex = 0;
 let tooltipTimeout;
@@ -116,6 +117,7 @@ document.addEventListener("keydown", (e) => {
       return;
     }
 
+    const answers = isReviewingVocabulary() ? vocabulary : kanji;
     matches = answers.filter((s) => s.startsWith(value) && s !== value);
     matchIndex = -1;
 
@@ -165,6 +167,11 @@ function getInputLanguage() {
   return input.lang;
 }
 
+function isReviewingVocabulary() {
+  const header = document.querySelector(".character-header--vocabulary");
+  return header !== null;
+}
+
 function createTooltip() {
   const tooltip = document.createElement("div");
   tooltip.className = "wanikani-autocomplete-tooltip";
@@ -201,11 +208,10 @@ function removeTooltip() {
 async function fetchAnswers() {
   chrome.runtime.sendMessage({ type: "get_synonyms" }, (res) => {
     if (res.success) {
-      answers = res.synonyms;
-      return res.synonyms;
+      kanji = res.kanji;
+      vocabulary = res.vocabulary;
     } else {
       console.error("Error:", res.error);
-      return [];
     }
   });
 }

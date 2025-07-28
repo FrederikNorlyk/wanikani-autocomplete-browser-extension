@@ -7,7 +7,8 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
     "wanikani_api_key",
     async ({ wanikani_api_key: apiKey }) => {
       let url = "https://api.wanikani.com/v2/subjects";
-      let allSynonyms = new Set();
+      let kanji = new Set();
+      let vocabulary = new Set();
 
       try {
         while (url) {
@@ -37,22 +38,34 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
           }
 
           for (const datum of json.data) {
+            const isVocabulary = datum.object === "vocabulary";
+            const collection = isVocabulary ? vocabulary : kanji;
+
             for (const meaning of datum.data.meanings) {
-              allSynonyms.add(meaning.meaning.toLowerCase());
+              collection.add(meaning.meaning.toLowerCase());
             }
 
             for (const meaning of datum.data.auxiliary_meanings) {
-              allSynonyms.add(meaning.meaning.toLowerCase());
+              collection.add(meaning.meaning.toLowerCase());
             }
           }
 
           url = json.pages?.next_url;
         }
 
-        let synonyms = Array.from(allSynonyms).sort(
+        const kanjiArray = Array.from(kanji).sort(
           (a, b) => a.length - b.length,
         );
-        sendResponse({ success: true, synonyms: synonyms });
+
+        const vocabularyArray = Array.from(vocabulary).sort(
+          (a, b) => a.length - b.length,
+        );
+
+        sendResponse({
+          success: true,
+          kanji: kanjiArray,
+          vocabulary: vocabularyArray,
+        });
       } catch (e) {
         sendResponse({ success: false, error: e.toString() });
       }
