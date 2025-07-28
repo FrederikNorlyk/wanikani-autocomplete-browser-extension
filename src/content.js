@@ -127,7 +127,7 @@ document.addEventListener("keydown", (e) => {
       removeTooltip();
       clearTimeout(tooltipTimeout);
     }
-  }, 200);
+  }, 100);
 });
 
 function getInput() {
