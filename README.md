@@ -10,9 +10,11 @@ Download the extension for Firefox [here](https://addons.mozilla.org/en-US/firef
 
 Go to [Personal Access Tokens](https://www.wanikani.com/settings/personal_access_tokens) and generate a new token. It only needs the permission called `all_data:read`. The extension needs an API token from WaniKani to collect the possible autocomplete suggestions.
 
-<img src="screenshots/settings.png" alt="Screenshot of the autocomplete functionality">
+<img src="screenshots/settings.png" alt="Screenshot of the WaniKani settings page">
 
 Copy your newly generated token and paste it into the extension's settings.
+
+<img src="screenshots/extension-settings.png" alt="Screenshot of the extension's settings">
 
 ## Development
 
