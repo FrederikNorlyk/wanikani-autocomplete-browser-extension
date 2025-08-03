@@ -2,7 +2,17 @@
 
 Browser extension for [WaniKani](https://www.wanikani.com), which adds autocomplete functionality for English answers.
 
-<img width="300" src="screenshot.png" alt="Screenshot of the autocomplete functionality">
+<img width="300" src="screenshots/screenshot.png" alt="Screenshot of the autocomplete functionality">
+
+## Usage
+
+The extension needs an API token from WaniKani to collect the possible autocomplete suggestions.
+
+Go to [Personal Access Tokens](https://www.wanikani.com/settings/personal_access_tokens) and generate a new token. It only needs the permission called `all_data:read`.
+
+<img src="screenshots/settings.png" alt="Screenshot of the autocomplete functionality">
+
+Copy your newly generated token and paste it into the extension's settings.
 
 ## Development
 
