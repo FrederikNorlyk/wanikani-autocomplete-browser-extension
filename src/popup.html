@@ -1,15 +1,25 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <link rel="stylesheet" href="popup.css">
+
     <title>WaniKani API Token</title>
   </head>
   <body>
+    <header>
+      <img src="icons/icon-48.png" alt="icon"/>
+      <h1>WaniKani Autocomplete</h1>
+    </header>
+
+    <h2>Settings</h2>
+
+    <p>Unsure how to get an API token? Have a look <a href="https://github.com/FrederikNorlyk/wanikani-autocomplete-browser-extension?tab=readme-ov-file#installation">here.</a></p>
+
     <form id="apiForm">
-      <label for="apiKey">WaniKani API Token:</label><br />
-      <input id="apiKey" name="apiKey" type="text" /><br /><br />
-      <button type="submit">Save</button>
+      <label for="apiKey">API Token:</label><br />
+      <input id="apiKey" name="apiKey" type="password" /><br /><br />
+      <button id="submitBtn" type="submit">Save</button>
     </form>
-    <p id="status"></p>
 
     <script src="popup.js"></script>
   </body>

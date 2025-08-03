@@ -9,9 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     const key = document.getElementById("apiKey").value;
     chrome.storage.local.set({ wanikani_api_key: key }, () => {
-      document.getElementById("status").textContent = "Saved!";
+      document.getElementById("submitBtn").textContent = "Saved!";
       setTimeout(
-        () => (document.getElementById("status").textContent = ""),
+        () => (document.getElementById("submitBtn").textContent = "Save"),
         2000,
       );
     });

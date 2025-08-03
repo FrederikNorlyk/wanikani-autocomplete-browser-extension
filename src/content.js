@@ -12,7 +12,7 @@ chrome.storage.local.get("wanikani_api_key", (data) => {
   if (data.wanikani_api_key) {
     apiKey = data.wanikani_api_key;
   } else {
-    apiKey = prompt("Please specify an API token.");
+    apiKey = prompt("Please specify an API token to enable the autocomplete functionality.");
     chrome.storage.local.set({ wanikani_api_key: apiKey });
   }
 
