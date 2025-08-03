@@ -2,7 +2,15 @@
 
 Browser extension for [WaniKani](https://www.wanikani.com), which adds autocomplete functionality for English answers.
 
+## How it works
+
+When you start typing an answer, a suggestion will appear. Pressing the `Tab` key will then insert the suggested answer into the text field.
+
 <img width="300" src="screenshots/screenshot.png" alt="Screenshot of the autocomplete functionality">
+
+You can keep pressing `Tab` to cycle between all possible suggestions for what you have just typed.
+
+**Hint:** Use `Shift+Tab` to go backwards.
 
 ## Installation
 
