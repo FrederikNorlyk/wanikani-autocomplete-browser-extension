@@ -1,6 +1,6 @@
 .wanikani-autocomplete-tooltip {
   position: fixed;
-  top: 228px;
+  top: 208px;
   left: 50%;
   transform: translate(-50%, -50%);
   background: #9800e4;
